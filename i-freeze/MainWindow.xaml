@@ -59,11 +59,11 @@
                         BorderThickness="0.5" BorderBrush="#B8B8B8"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
                             VerticalAlignment="Center" Margin="10,0,0,0">
-                    <Image Source="/Images/IceLockHeader.jpg" Width="39" 
+                    <Image Source="/Images/ICELOCK.ico" Width="21" 
                            HorizontalAlignment="Left"
                            Margin="0,1,5,0"
                     />
-                    <TextBlock Text="ICE LOCK" FontSize="19"
+                    <TextBlock Text="ICE LOCK" FontSize="16"
                                FontWeight="SemiBold" Foreground="#FF175AA8"
                                VerticalAlignment="Center"/>
                 </StackPanel>
