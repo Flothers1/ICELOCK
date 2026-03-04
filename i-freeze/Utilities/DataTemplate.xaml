@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:i_freeze.ViewModel"
+                    xmlns:view="clr-namespace:i_freeze.View">
+
+
+    <DataTemplate x:Name="SwitcherUser" DataType="{x:Type vm:SwitcherUserViewModel}">
+        <view:SwitcherUser />
+    </DataTemplate>
+
+
+    <DataTemplate x:Name="Home" DataType="{x:Type vm:HomeViewModel}">
+        <view:Home />
+    </DataTemplate>
+
+ 
+    <DataTemplate x:Name="Support" DataType="{x:Type vm:SupportViewModel}">
+        <view:Support />
+    </DataTemplate>
+
+    <DataTemplate x:Name="Settings" DataType="{x:Type vm:SettingsViewModel}">
+        <view:Settings />
+    </DataTemplate>
+
+    <DataTemplate x:Name="SettingsAdmin" DataType="{x:Type vm:SettingsAdminViewModel}">
+        <view:SettingsAdmin />
+    </DataTemplate>
+
+    <DataTemplate x:Name="Login" DataType="{x:Type vm:LoginViewModel}">
+        <view:Login />
+    </DataTemplate>
+
+    <DataTemplate x:Name="Logout" DataType="{x:Type vm:LogoutViewModel}">
+        <view:Logout />
+    </DataTemplate>
+
+    <DataTemplate x:Name="ChangePassword" DataType="{x:Type vm:ChangePasswordViewModel}">
+        <view:ChangePassword />
+    </DataTemplate>
+
+    <DataTemplate x:Name="FilesProtection" DataType="{x:Type vm:FilesProtectionViewModel}">
+        <view:FilesProtection />
+    </DataTemplate>
+
+    <DataTemplate x:Name="Activation" DataType="{x:Type vm:ActivationViewModel}">
+        <view:Activation />
+    </DataTemplate>
+
+    <DataTemplate x:Name="LabeledFilesView" DataType="{x:Type vm:LabeledFilesViewModel}">
+        <view:LabeledFilesView />
+    </DataTemplate>
+    <DataTemplate x:Name="LabelsView" DataType="{x:Type vm:LabelsViewModel}">
+        <view:LabelsView />
+    </DataTemplate>
+    <DataTemplate x:Name="SharedFilesView" DataType="{x:Type vm:SharedFilesViewModel}">
+        <view:SharedFilesView />
+    </DataTemplate>
+
+</ResourceDictionary>
+

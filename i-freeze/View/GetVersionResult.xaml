@@ -1,0 +1,122 @@
+﻿<Window x:Class="i_freeze.View.GetVersionResult"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:i_freeze.View" 
+        xmlns:vm="clr-namespace:i_freeze.ViewModel" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:h="clr-namespace:i_freeze.Commands" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Background="Transparent" 
+        ResizeMode="NoResize" AllowsTransparency="True" 
+        Height = "205" Width = "600" 
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None" Topmost="True">
+
+    <Window.DataContext>
+        <vm:GetVersionResultViewModel/>
+    </Window.DataContext>
+
+    <i:Interaction.Behaviors>
+        <h:WindowDragAndDrop />
+    </i:Interaction.Behaviors>
+
+
+    <Border>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" 
+              RenderingBias="Quality" 
+              ShadowDepth="0" 
+              Opacity="0.8"
+              Color="Black"
+              />
+        </Border.Effect>
+
+        <Grid Margin="20">
+            
+            <Border Background="Transparent" CornerRadius="10"/>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="White"
+                        CornerRadius="10 10 0 0">
+
+                    <Grid>
+
+                        <Image Source="/Images/logo I-freeze 3-3 and 10-03.jpg" Width="100" 
+                               HorizontalAlignment="Left"
+                               Margin="7 0 0 0"
+                               />
+
+                        <Border HorizontalAlignment="Right" 
+                                Margin="0,0,0,0"
+                                Height="40" Width="40"
+                                Style="{StaticResource CloseWindow}"
+                                CornerRadius="0 10 0 0"
+                                >
+
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                                    Width="25" Height="25" Background="{x:Null}" 
+                                    BorderBrush="{x:Null}" Foreground="#FF175AA8"
+                                    Command="{Binding CloseCommand}"
+                                    >
+
+                                <materialDesign:PackIcon Kind="Close" HorizontalAlignment="Center"/>
+                            </Button>
+                        </Border>
+                    </Grid>
+
+                </Border>
+
+
+                <Border Grid.Row="1" Background="#FF175AA8"
+                        CornerRadius="0 0 10 10">
+
+                    <Grid Background = "White" Margin="28,15,28,15" >
+
+                        <!--<Button Content="Close"  Background="#FF175AA8" BorderBrush="#FF175AA8" Click="Button_Click" Margin="236,56,236,0" />-->
+                        <ScrollViewer Background="#FF175AA8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer.Style>
+                                <Style TargetType="ScrollViewer">
+                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                    <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=ScanResult}" Value="All applications are up to date">
+                                            <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+                                            <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ScrollViewer.Style>
+
+                            <TextBlock x:Name="ScanResult" Text="{Binding Review}"  
+                                   HorizontalAlignment="Center"
+                                   Foreground="{Binding ForegroundColor}" 
+                                   Margin="0,10,0,0" 
+                                   TextWrapping="Wrap" 
+                                   VerticalAlignment="Top" 
+                                   FontSize="{Binding FontSize}" 
+                                   TextAlignment="Center"/>
+                        </ScrollViewer>
+
+
+                        <!--<ScrollViewer>
+                        <TextBlock />
+                        </ScrollViewer>-->
+                    </Grid>
+
+                </Border>
+                
+
+            </Grid>
+            
+        </Grid>
+    </Border>
+    
+</Window>

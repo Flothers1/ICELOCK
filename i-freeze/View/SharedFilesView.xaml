@@ -1,0 +1,252 @@
+﻿<UserControl x:Class="i_freeze.View.SharedFilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:i_freeze.ViewModel" 
+             xmlns:local="clr-namespace:i_freeze.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="560" d:DesignWidth="650"
+             Style="{StaticResource Page_Style}">
+    <UserControl.DataContext>
+        <vm:SharedFilesViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Background="Transparent">
+        <!-- Title -->
+        <TextBlock HorizontalAlignment="Center" 
+                   Foreground="#FF175AA8" 
+                   Height="43" 
+                   Margin="0,25,0,0"
+                   TextWrapping="Wrap" 
+                   VerticalAlignment="Top" 
+                   Width="262"  
+                   Text="Shared Files" 
+                   FontSize="24"
+                   TextAlignment="Center"/>
+
+        <!-- Separator Line -->
+        <Rectangle HorizontalAlignment="Center" 
+                   Height="1" 
+                   Margin="0,80,0,0" 
+                   Stroke="#FF175AA8" 
+                   VerticalAlignment="Top" 
+                   Width="627"/>
+
+        <!-- ScrollViewer wrapping ListView for guaranteed horizontal scroll -->
+        <ScrollViewer Margin="12,107,12,135"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch">
+            <ListView x:Name="FilesList" 
+                      ItemsSource="{Binding SharedFiles}"
+                      SelectedItem="{Binding SelectedFile}"
+                      SelectionMode="Single"
+                      BorderBrush="#FF175AA8" 
+                      Foreground="#FF175AA8"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      HorizontalContentAlignment="Left" SelectionChanged="FilesList_SelectionChanged">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="#FF175AA8"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="6"/>
+                        <Setter Property="Background" Value="#FFF0F0F0"/>
+                        <Setter Property="BorderBrush" Value="#FFD0D0D0"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                    </Style>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderBrush" Value="#FFD0D0D0"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="Margin" Value="0,2,0,2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Padding="{TemplateBinding Padding}"
+                                            Margin="{TemplateBinding Margin}">
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}"
+                                                             Columns="{TemplateBinding GridView.ColumnCollection}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#FFE3F2FD"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFF5F5F5"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="#FF175AA8"/>
+                        <Setter Property="BorderBrush" Value="#FF175AA8"/>
+                        <Setter Property="Padding" Value="8,3"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="FontSize" Value="11"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="2"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                         VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF1E6BC7"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="#FF134A89"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="#FF9AB8D9"/>
+                                            <Setter Property="Foreground" Value="#FFE0E0E0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="File Name" Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FileName}" 
+                                              TextTrimming="CharacterEllipsis" 
+                                              ToolTip="{Binding FileName}"
+                                              TextAlignment="Left"
+                                              HorizontalAlignment="Left"
+                                              Padding="8,6"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Shared With" Width="135">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SharedWithEmail}" 
+                                              TextTrimming="CharacterEllipsis"
+                                              ToolTip="{Binding SharedWithEmail}"
+                                              Padding="8,6"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Password" Width="90">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Password}" 
+                                              FontFamily="Consolas"
+                                              FontSize="11"
+                                              Padding="8,6"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                  
+                        <!-- SharedAt column now binds to string property -->
+                        <GridViewColumn Header="Date" Width="115">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SharedAt}" 
+                                      FontSize="11"
+                                      Padding="8,6"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!-- Expiration column now binds to string property -->
+                        <GridViewColumn Header="Expiration" Width="98">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ExpirationDate}" 
+                                      FontSize="11"
+                                      Padding="8,6"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--Actions column with buttons-->
+                        <GridViewColumn Header="Actions" Width="135">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                                        <Button Command="{Binding DataContext.OpenLinkCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                       CommandParameter="{Binding}"
+                       Width="30"
+                       Height="30"
+                       ToolTip="Open link">
+                                            <TextBlock Text="&#xE8A7;" 
+                              FontFamily="Segoe MDL2 Assets" 
+                              FontSize="16"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                                        </Button>
+                                        <Button Command="{Binding DataContext.CopyLinkCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                       CommandParameter="{Binding}"
+                       Width="30"
+                       Height="30"
+                       ToolTip="Copy link to clipboard">
+                                            <TextBlock Text="&#xE8C8;" 
+                              FontFamily="Segoe MDL2 Assets" 
+                              FontSize="16"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom"
+            Margin="0,0,0,70">
+            <Button Content="Refresh" 
+            Command="{Binding RefreshCommand}"
+            Foreground="White" 
+            Background="#FF175AA8" 
+            Width="120"
+            Height="32"
+            Margin="4"
+            Cursor="Hand">
+                <!-- template unchanged -->
+            </Button>
+
+            <Button Content="Remove All" 
+            Command="{Binding RemoveAllCommand}"
+            Foreground="White" 
+            Background="#FF175AA8" 
+            Width="120"
+            Height="32"
+            Margin="4"
+            Cursor="Hand">
+                <!-- template unchanged -->
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

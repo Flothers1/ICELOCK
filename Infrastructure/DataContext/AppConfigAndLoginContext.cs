@@ -1,0 +1,28 @@
+﻿
+using Infrastructure.Model;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.DataContext
+{
+    public class AppConfigAndLoginContext : DbContext
+    {
+
+
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    string dbFile = Path.Combine(MainDBsPath.DatabasesPath, "Application_ConfigurationDB.db");
+        //    optionsBuilder.UseSqlite($@"Data Source={dbFile}; Password=$sZwty@sT*U7#b7E;");
+        //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            optionsBuilder.UseSqlite($"Data Source={MainDBsPath.Path}Application_ConfigurationDB.db;");
+
+        }
+
+        public DbSet<Configurations> Application_Configuration { get; set; }
+        public DbSet<LoginModule> LoginModule { get; set; }
+    }
+}

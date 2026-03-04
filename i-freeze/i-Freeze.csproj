@@ -1,0 +1,234 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RootNamespace>i_freeze</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<ApplicationIcon>Images\ICELOCk.ico</ApplicationIcon>
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="ICELOCK-MainLogo %282%29.ico" />
+		<None Remove="ICELOCK.ico" />
+		<None Remove="Images\close-line-icon-blue.png" />
+		<None Remove="Images\close-line-icon-white.png" />
+		<None Remove="Images\cover fecbook I-freeze-03 %281%29.png" />
+		<None Remove="Images\cover fecbook I-freeze-03 %282%29.png" />
+		<None Remove="Images\cover fecbook I-freeze-03.jpg" />
+		<None Remove="Images\cover fecbook I-freeze-03.png" />
+		<None Remove="Images\ICELOCK-01.jpg" />
+		<None Remove="Images\ICELOCK-icon.ico" />
+		<None Remove="Images\ICELOCK-MainLogo %281%29.ico" />
+		<None Remove="Images\ICELOCK-MainLogo %282%29.ico" />
+		<None Remove="Images\ICELOCK-MainLogo.png" />
+		<None Remove="Images\ICELOCK-white-01.png" />
+		<None Remove="Images\ICELOCK.ico" />
+		<None Remove="Images\IceLockHeader.jpg" />
+		<None Remove="Images\IceLockLogo.jpg" />
+		<None Remove="Images\IceLockLogo.png" />
+		<None Remove="Images\ICELOCKLogooo.png" />
+		<None Remove="Images\IceLockWhiteLogo.jpg" />
+		<None Remove="Images\icon-01 %281%29.png" />
+		<None Remove="Images\icon-01.png" />
+		<None Remove="Images\icon-02 %281%29.png" />
+		<None Remove="Images\icon-02.png" />
+		<None Remove="Images\lock.png" />
+		<None Remove="Images\logo I-freeze 3-3 and 10-02.jpg" />
+		<None Remove="Images\logo I-freeze 3-3 and 10-03.jpg" />
+		<None Remove="Images\MicrosoftTeams-image %283%29.png" />
+		<None Remove="Images\MicrosoftTeams-image %284%29.png" />
+		<None Remove="Images\MicrosoftTeams-image %285%29.png" />
+		<None Remove="Images\MicrosoftTeams-image_3_2_130x72.png" />
+		<None Remove="Images\MicrosoftTeams-image_4_2_130x72.png" />
+		<None Remove="Images\MicrosoftTeams-image_5_3_130x72.png" />
+		<None Remove="Images\minus-line-icon-blue.png" />
+		<None Remove="Images\MixSheld.ico" />
+		<None Remove="Images\share.png" />
+		<None Remove="Images\sheld-01.ico" />
+		<None Remove="Images\sheld-01.jpg" />
+		<None Remove="Images\sheld-01.png" />
+		<None Remove="Images\sheld-01Copy.png" />
+		<None Remove="Images\sync.png" />
+		<None Remove="Images\update.png" />
+		<None Remove="Images\WhiteSheld.png" />
+		<None Remove="View\icon-03 %281%29.png" />
+		<None Remove="Images\icon-03 %281%29.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Images\ICELOCK.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Images\ICELOCK-icon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Images\ICELOCK-MainLogo (1).ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
+	  <Resource Include="Images\ICELOCK-MainLogo (2).ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <COMReference Include="IWshRuntimeLibrary">
+	    <WrapperTool>tlbimp</WrapperTool>
+	    <VersionMinor>0</VersionMinor>
+	    <VersionMajor>1</VersionMajor>
+	    <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+	    <Lcid>0</Lcid>
+	    <Isolated>false</Isolated>
+	    <EmbedInteropTypes>true</EmbedInteropTypes>
+	  </COMReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="ICELOCK-MainLogo (2).ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="ICELOCK.ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="MixSheld.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Eziriz.Reactor.TrimHelper" Version="6.9.0" />
+		<PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+		<PackageReference Include="MaterialDesignThemes.MahApps" Version="0.3.0" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+		<PackageReference Include="Microsoft.WindowsAPICodePack.Shell" Version="1.1.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+		<PackageReference Include="VisioForge.DotNet.Core" Version="15.7.34" />
+		<PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\IFreezeWorker\IceLockWorker.csproj" />
+		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Images\close-line-icon-blue.png" />
+		<Resource Include="Images\close-line-icon-white.png" />
+		<Resource Include="Images\cover fecbook I-freeze-03 (2).png" />
+		<Resource Include="Images\cover fecbook I-freeze-03.jpg" />
+		<Resource Include="Images\ICELOCK-01.jpg">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\ICELOCK-MainLogo.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\ICELOCK-white-01.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\IceLockHeader.jpg">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\ICELOCKLogooo.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\icon-01 (1).png" />
+		<Resource Include="Images\icon-01.png" />
+		<Resource Include="Images\icon-02 (1).png" />
+		<Resource Include="Images\icon-02.png" />
+		<Resource Include="Images\icon-03 (1).png" />
+		<Resource Include="Images\lock.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\logo I-freeze 3-3 and 10-03.jpg" />
+		<Resource Include="Images\minus-line-icon-blue.png" />
+		<Resource Include="Images\MixSheld.ico" />
+		<Resource Include="Images\share.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\sync.png">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Images\update.png" />
+		<Resource Include="Images\WhiteSheld.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="View\MessageBoxWindowConfirmPostpone.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Databases\Application_ConfigurationDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\Application_ConfigurationPY.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\blocked_AppsDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\Blocked_ServicesDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\Blocked_WebsitesDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\CurrentProcessDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\DeviceActionsDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\DeviceStatusDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\EventViewerDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\FilesProtectionDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\Malware_HashsDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\NetworkPADB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\NetworkScanDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\proactive.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\ScanDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Databases\ToggleButtonActionDB.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

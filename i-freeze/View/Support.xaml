@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="i_freeze.View.Support"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:i_freeze.View"
+             xmlns:vm="clr-namespace:i_freeze.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="560" d:DesignWidth="650"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <vm:SupportViewModel/>
+    </UserControl.DataContext>
+
+
+    <Grid Background="Transparent">
+
+        <TextBlock HorizontalAlignment="Center" 
+                   Foreground="#FF175AA8" Height="43" TextWrapping="Wrap" 
+                   VerticalAlignment="Top" Width="98" FontSize="24" 
+                   Text="Support" Margin="0,18,0,0"/>
+
+        <Rectangle HorizontalAlignment="Center"  
+                   Stroke="#FF175AA8" 
+                   VerticalAlignment="Top" Width="626" Margin="0,64,0,0"/>
+
+
+        <Label Content="Name" 
+               HorizontalAlignment="Left"
+               Margin="20,130,0,404" 
+               Height="26"
+               Foreground="#FF175AA8" />
+
+        <TextBox x:Name="Name"   
+                 HorizontalAlignment="Left"  
+                 Margin="120,130,0,404"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Width="260" Height="26" 
+                 BorderBrush="#FF175AA8" CaretBrush="#FF175AA8" 
+                 Foreground="#FF175AA8" SelectionBrush="#FF175AA8"/>
+
+        <Label Content="Email" 
+               HorizontalAlignment="Left"
+               Margin="20,180,0,354" 
+               Height="26"
+               Foreground="#FF175AA8"/>
+
+        <TextBox x:Name="Email"
+                 Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Left"  
+                 Margin="120,180,0,0" 
+                 Width="260" Height="26" 
+                 VerticalAlignment="Top" 
+                 BorderBrush="#FF175AA8" CaretBrush="#FF175AA8" 
+                 Foreground="#FF175AA8" SelectionBrush="#FF175AA8"/>
+
+        <Label Content="Phone" 
+               HorizontalAlignment="Left" 
+               Height="26"
+               Margin="20,230,0,304" 
+               Foreground="#FF175AA8"/>
+
+        <TextBox x:Name="Phone"
+                 Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Left"  
+                 Margin="120,230,0,304" 
+                 Width="260" Height="26"
+                 BorderBrush="#FF175AA8" CaretBrush="#FF175AA8" 
+                 Foreground="#FF175AA8" SelectionBrush="#FF175AA8"/>
+
+        <Label Content="Description" 
+               HorizontalAlignment="Left"
+               Height="26"
+               Margin="20,300,0,234" 
+               Foreground="#FF175AA8"/>
+
+        <TextBox x:Name="Descreption"
+                 Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Left"  
+                 TextWrapping="Wrap"
+                 Margin="120,310,0,0" 
+                 Width="260" Height="75" 
+                 VerticalAlignment="Top" 
+                 BorderBrush="#FF175AA8" CaretBrush="#FF175AA8" 
+                 Foreground="#FF175AA8" SelectionBrush="#FF175AA8"/>
+
+        <Button Content="Submit" 
+                HorizontalAlignment="Left" 
+                Height="38"
+                Margin="185,424,0,0" 
+                VerticalAlignment="Top" Width="150" 
+                Background="#FF175AA8"
+                Command="{Binding SubmitCommand}"/>
+
+    </Grid>
+
+</UserControl>

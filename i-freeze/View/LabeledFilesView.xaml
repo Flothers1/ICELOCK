@@ -1,0 +1,302 @@
+﻿<UserControl x:Class="i_freeze.View.LabeledFilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:i_freeze.View"
+             xmlns:vm="clr-namespace:i_freeze.ViewModel" 
+             mc:Ignorable="d" 
+             d:DesignHeight="560" d:DesignWidth="650"
+             Style="{StaticResource Page_Style}">
+
+    <UserControl.DataContext>
+        <vm:LabeledFilesViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <local:WidthSubtractConverter x:Key="WidthSubtractConverter"/>
+    </UserControl.Resources>
+    
+    <Grid Background="Transparent">
+        <!-- Title -->
+        <TextBlock HorizontalAlignment="Center" 
+                   Foreground="#FF175AA8" 
+                   Height="43" 
+                   Margin="0,25,0,0"
+                   TextWrapping="Wrap" 
+                   VerticalAlignment="Top" 
+                   Width="263"  
+                   Text="Classfied Files" 
+                   FontSize="24"
+                   TextAlignment="Center"/>
+
+        <!-- Separator Line -->
+        <Rectangle HorizontalAlignment="Center" 
+                   Height="1" 
+                   Margin="0,80,0,0" 
+                   Stroke="#FF175AA8" 
+                   VerticalAlignment="Top" 
+                   Width="627"/>
+
+        <!-- ListView -->
+        <ListView x:Name="FilesListView"
+          Margin="12,107,12,135"
+          ItemsSource="{Binding MonitoredFiles}"
+          SelectedItem="{Binding SelectedFile}"
+          SelectionChanged="FilesListView_SelectionChanged"
+          VerticalAlignment="Stretch"
+          BorderBrush="#FF175AA8"
+          Foreground="#FF175AA8"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          HorizontalContentAlignment="Stretch">
+            <!-- 1: force stretching -->
+
+            <!-- 2: explicit ItemContainerStyle so implicit styles elsewhere won't break this -->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="BorderBrush" Value="#FFD0D0D0"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="Margin" Value="0,2,0,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                Margin="{TemplateBinding Margin}">
+                                    <!-- ensure row presenter stretches -->
+                                    <GridViewRowPresenter Content="{TemplateBinding Content}"
+                                                  Columns="{TemplateBinding GridView.ColumnCollection}"
+                                                  HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#FFE3F2FD"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFF5F5F5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Foreground" Value="#FF175AA8"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Padding" Value="6"/>
+                    <Setter Property="Background" Value="#FFF0F0F0"/>
+                    <Setter Property="BorderBrush" Value="#FFD0D0D0"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                </Style>
+                <!-- keep the TextBlock VerticalAlignment rule if you want -->
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="File Path"
+                            Width="{Binding ActualWidth, ElementName=FilesListView, Converter={StaticResource WidthSubtractConverter}, ConverterParameter=160}">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding file_path}"
+                                   TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center"
+                                   Padding="8,6"
+                                   ToolTip="{Binding file_path}"
+                                   HorizontalAlignment="Left"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Label column - use a Grid root and center the TextBlock -->
+                    <GridViewColumn Header="Label" Width="143">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <!-- Grid always stretches to fill the available cell -->
+                                <Grid HorizontalAlignment="Stretch">
+                                    <!-- Center the TextBlock inside the stretched Grid -->
+                                    <TextBlock Text="{Binding label}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Padding="0,6"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Action Buttons Row --><!--
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,70">
+            <Button Content="Add File Path" 
+                    Command="{Binding AddFilePathCommand}"
+                    Foreground="White" 
+                    Background="#FF175AA8" 
+                    Width="120"
+                    Height="32"
+                    Margin="4"
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="#FF175AA8"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Padding="8,5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1E6BC7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF134A89"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Content="Delete Selected" 
+                    Command="{Binding DeleteSelectedCommand}"
+                    Foreground="White" 
+                    Background="#FF175AA8" 
+                    Width="120"
+                    Height="32"
+                    Margin="4"
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="#FF175AA8"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Padding="8,5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1E6BC7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF134A89"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Content="Open Selected" 
+                    Command="{Binding OpenSelectedCommand}"
+                    Foreground="White" 
+                    Background="#FF175AA8" 
+                    Width="120"
+                    Height="32"
+                    Margin="4"
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="#FF175AA8"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Padding="8,5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1E6BC7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF134A89"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button Content="Reset All" 
+                    Command="{Binding ResetAllCommand}"
+                    Foreground="White" 
+                    Background="#FF175AA8" 
+                    Width="120"
+                    Height="32"
+                    Margin="4"
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="#FF175AA8"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Padding="8,5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1E6BC7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF134A89"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+
+        --><!-- Update Settings Button --><!--
+        <Button Content="Update Settings" 
+                Command="{Binding UpdateSettingsCommand}"
+                Foreground="White" 
+                Background="#FF175AA8" 
+                HorizontalAlignment="Center"
+                Width="120"
+                Height="32"
+                Margin="0,0,0,25" 
+                VerticalAlignment="Bottom"
+                Cursor="Hand">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="#FF175AA8"
+                            BorderThickness="1"
+                            CornerRadius="2"
+                            Padding="8,5">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FF1E6BC7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#FF134A89"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>-->
+    </Grid>
+</UserControl>

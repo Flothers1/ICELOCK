@@ -1,0 +1,206 @@
+﻿<UserControl x:Class="i_freeze.View.SwitcherUser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:i_freeze.View" 
+             xmlns:Menu="clr-namespace:i_freeze.Utilities" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:vm="clr-namespace:i_freeze.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="610" d:DesignWidth="165">
+
+    <UserControl.DataContext>
+        <vm:SwitcherUserViewModel/>
+    </UserControl.DataContext>
+
+    <!-- switcher column 0 -->
+    <Grid HorizontalAlignment="Left" Width="165">
+
+        <Border Background="#FF175AA8"
+            CornerRadius="0,0,0,10" />
+
+        <!-- MAIN GRID FOR MENU -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <!-- Top menu -->
+                <RowDefinition Height="Auto" />
+                <!-- Bottom menu -->
+            </Grid.RowDefinitions>
+
+            <!-- 🔼 TOP MENU -->
+            <StackPanel Grid.Row="0">
+                <!-- Home -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+            Command="{Binding HomeCommand}"
+            Height="45"
+            IsChecked="True">
+
+                    <Grid>
+
+                        <materialDesign:PackIcon 
+                  Kind="ViewDashboard"
+                  Foreground="White"
+                  Margin="5 0 0 0"
+                  Height="28" Width="28"
+                  VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Home"
+                 Margin="40,0,0,0"
+                 Foreground="White"
+                 FontSize="14"
+                 Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+
+                <!-- Labeled Files -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                      Command="{Binding LabeledFilesCommand}"
+                      Height="45">
+                    <Grid>
+                        <materialDesign:PackIcon Kind="File"
+                                              Foreground="White"
+                                              Margin="5 0 0 0"
+                                              Height="28" Width="28"
+                                              VerticalAlignment="Center"/>
+                        <TextBlock Text="Classfied Files"
+                               Margin="40,0,0,0"
+                               Foreground="White"
+                               FontSize="14"
+                               Style="{StaticResource Text_Style}" />
+                    </Grid>
+                </Menu:Btn>
+                <!--// Admin Access //--><!--
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+            Command="{Binding AdminAccessCommand}"
+            Height="45">
+
+                    <Grid>
+
+                        <materialDesign:PackIcon Kind="AdministratorOutline"
+                          Margin="5 0 0 0"
+                          Height="28" Width="28"
+                          Foreground="White"
+                          VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Account Login"
+                         Margin="40,0,0,0"
+                         FontSize="14"
+                         Foreground="White"
+                         Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>-->
+                <!-- Lables -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                Command="{Binding LabelsCommand}"
+                Height="45">
+                    <Grid>
+                        <materialDesign:PackIcon Kind="Label"
+                                        Foreground="White"
+                                        Margin="5 0 0 0"
+                                        Height="28" Width="28"
+                                        VerticalAlignment="Center"/>
+                        <TextBlock Text="Labels"
+                         Margin="40,0,0,0"
+                         Foreground="White"
+                         FontSize="14"
+                         Style="{StaticResource Text_Style}" />
+                    </Grid>
+                </Menu:Btn>
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                  Command="{Binding SharedFilesCommand}"
+                  Height="45">
+                                    <Grid>
+                                        <materialDesign:PackIcon Kind="Share"
+                                          Foreground="White"
+                                          Margin="5 0 0 0"
+                                          Height="28" Width="28"
+                                          VerticalAlignment="Center"/>
+                                        <TextBlock Text="Shared Files"
+                           Margin="40,0,0,0"
+                           Foreground="White"
+                           FontSize="14"
+                           Style="{StaticResource Text_Style}" />
+                    </Grid>
+                </Menu:Btn>
+             
+                <!--// Files Protection //-->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                 Command="{Binding FilesProtectionCommand}"
+                 Height="45">
+
+                        <Grid>
+
+                            <materialDesign:PackIcon 
+                       Kind="FileCheck"
+                       Foreground="White"
+                       Margin="5 0 0 0"
+                       Height="28" Width="28"
+                       VerticalAlignment="Center"/>
+    
+                        <TextBlock Text="Files Encryption"
+                      Margin="40,0,0,0"
+                      Foreground="White"
+                      FontSize="14"
+                      Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+
+                <!-- Settings -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                      Command="{Binding SettingsCommand}"
+                      Height="45">
+                    <Grid>
+                        <materialDesign:PackIcon Kind="Settings"
+                                              Margin="5 0 0 0"
+                                              Foreground="White"
+                                              Height="28" Width="28"
+                                              VerticalAlignment="Center"/>
+                        <TextBlock Text="Settings"
+                               Margin="40,0,0,0"
+                               Foreground="White"
+                               FontSize="14"
+                               Style="{StaticResource Text_Style}" />
+                    </Grid>
+                </Menu:Btn>
+
+            </StackPanel>
+
+            <!-- 🔽 BOTTOM MENU (LOGOUT) -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+
+                <Separator Margin="10"/>
+
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                      Command="{Binding LogoutCommand}"
+                      Height="45">
+
+                    <Grid>
+                        <materialDesign:PackIcon Kind="Logout"
+                                              Margin="5 0 0 0"
+                                              Foreground="White"
+                                              Height="28" Width="28"
+                                              VerticalAlignment="Center"/>
+                        <TextBlock Text="Log Out"
+                               Margin="40,0,0,0"
+                               Foreground="White"
+                               FontSize="14"
+                               Style="{StaticResource Text_Style}" />
+                    </Grid>
+
+                </Menu:Btn>
+
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,31 @@
+[Setup]
+AppName=i-Freeze
+AppVersion=4.5
+DefaultDirName=C:\Users\Public\i-Freeze
+DisableProgramGroupPage=yes
+OutputDir=.
+OutputBaseFilename=i-Freeze
+Compression=lzma
+SolidCompression=yes
+UninstallDisplayName=i-Freeze
+UninstallDisplayIcon={app}\MixSheld.ico
+SetupIconFile=D:\NewCode\i-freezeGui_Kiosk-worker - i-FreezeLite - 64-32 -New exes\files\MixSheld.ico
+WizardSmallImageFile=D:\NewCode\i-freezeGui_Kiosk-worker - i-FreezeLite - 64-32 -New exes\files\MixSheld.bmp
+PrivilegesRequired=admin
+
+[Files]
+Source: "D:\NewCode\i-freezeGui_Kiosk-worker - i-FreezeLite - 64-32 -New exes\files\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
+
+[Run]
+Filename: "{app}\i-FreezeRCI.exe"; WorkingDir: "{app}"
+
+
+[UninstallRun]
+Filename: "{app}\i-FreezeUninstall.exe"; WorkingDir: "{app}"
+
+[Icons]
+Name: "{commonstartup}\i-FreezeWatch"; Filename: "{app}\i-FreezeWatch.exe"
+; ✅ Add Desktop Shortcut
+Name: "{commondesktop}\i-Freeze"; Filename: "{app}\i-FreezeRestart.exe"; WorkingDir: "{app}"; IconFilename: "{app}\MixSheld.ico"
+; ✅ Start Menu shortcut
+Name: "{commonprograms}\i-Freeze\i-Freeze"; Filename: "{app}\i-FreezeRestart.exe"; WorkingDir: "{app}"; IconFilename: "{app}\MixSheld.ico"

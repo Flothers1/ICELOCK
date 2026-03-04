@@ -1,0 +1,96 @@
+<Window x:Class="i_freeze.View.DlpSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:i_freeze.View"
+        mc:Ignorable="d"
+        Title="DlpSettingsWindow" Height="560" Width="560">
+    <Window.Resources>
+        <Style x:Key="MainButton" TargetType="Button">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="MinWidth" Value="140"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#2f6fb3"/>
+            <Setter Property="BorderBrush" Value="#174a84"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="HeaderText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="SectionTab" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="#2d79c9"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="12,12,12,6"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <!-- Title bar -->
+            <RowDefinition Height="36"/>
+            <!-- tab row -->
+            <RowDefinition Height="*"/>
+            <!-- list -->
+            <RowDefinition Height="80"/>
+            <!-- action buttons -->
+            <RowDefinition Height="60"/>
+            <!-- update button -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2f6fb3" CornerRadius="4">
+            <TextBlock Text="DLP Settings" Style="{StaticResource HeaderText}" VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- "Monitored Files" tab-like label with divider below -->
+        <StackPanel Grid.Row="1" Margin="0,6,0,0">
+            <TextBlock
+                   Text="Monitored Files"
+                   Background="white"
+                   Foreground="#2f6fb3"
+                   Style="{StaticResource SectionTab}" />
+            <!-- Divider line between header/tab and content -->
+            <Rectangle Height="1" Fill="#d6e1f2" HorizontalAlignment="Stretch" Margin="12,6,12,0"/>
+        </StackPanel>
+
+        <!-- ListView for file list -->
+        <Border Grid.Row="2" Background="White" CornerRadius="4" Padding="6" Margin="0,6,0,6">
+            <ListView ItemsSource="{Binding MonitoredFiles}" SelectedItem="{Binding SelectedFile}" Name="FilesListView">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="File Path" Width="400" DisplayMemberBinding="{Binding FilePath}" />
+                        <GridViewColumn  Header="Label" Width="120" DisplayMemberBinding="{Binding Label}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <!-- Buttons row -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Add File Path" Style="{StaticResource MainButton}" Command="{Binding AddFilePathCommand}" />
+            <Button Content="Delete Selected" Style="{StaticResource MainButton}" Command="{Binding DeleteSelectedCommand}" />
+            <Button Content="Open Selected" Style="{StaticResource MainButton}" Command="{Binding OpenSelectedCommand}" />
+            <Button Content="Reset All" Style="{StaticResource MainButton}" Command="{Binding ResetAllCommand}" />
+        </StackPanel>
+
+        <!-- Update Settings button centered -->
+        <StackPanel Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Update Settings" Width="260" Height="36" Style="{StaticResource MainButton}" Command="{Binding UpdateSettingsCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

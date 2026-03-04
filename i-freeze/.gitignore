@@ -1,0 +1,33 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/bin
+/obj
+
+# Ignore build output
+bin/
+obj/
+Debug/
+Release/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore log files
+*.log
+
+# Ignore package files
+*.nupkg
+*.snupkg
+
+# Ignore caches
+*.cache
+
+# Ignore Visual Studio publish profiles (all projects)
+**/Properties/PublishProfiles/
+**/*.pubxml
+**/*.pubxml.user
