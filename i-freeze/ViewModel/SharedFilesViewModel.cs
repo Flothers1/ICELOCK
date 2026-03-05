@@ -24,10 +24,13 @@ namespace i_freeze.ViewModel
         public SharedFile SelectedFile
         {
             get => _selectedFile;
-            set { _selectedFile = value; OnPropertyChanged(); }
+            set { _selectedFile = value; OnPropertyChanged();
+                CommandManager.InvalidateRequerySuggested();
+            }
         }
 
         public ICommand RefreshCommand { get; }
+        public ICommand RemoveCommand { get; }
         public ICommand RemoveAllCommand { get; }
 
         public ICommand OpenLinkCommand { get; }
@@ -36,6 +39,7 @@ namespace i_freeze.ViewModel
         public SharedFilesViewModel()
         {
             RefreshCommand = new RelayCommand(async _ => await LoadAsync());
+            RemoveCommand = new RelayCommand(async _ => await RemoveSelectedAsync(), _ => SelectedFile != null);
             RemoveAllCommand = new RelayCommand(async _ => await RemoveAllAsync());
 
             OpenLinkCommand = new RelayCommand(async p => await OpenLinkAsync(p as SharedFile));
@@ -127,6 +131,51 @@ namespace i_freeze.ViewModel
                 new ShowMessage("Failed to copy link: " + ex.Message);
             }
         }
+        private async Task RemoveSelectedAsync()
+        {
+            try
+            {
+                if (SelectedFile == null)
+                {
+                    new ShowMessage("No file selected");
+                    return;
+                }
+                var confirm = MessageBox.Show($"Remove selected file '{SelectedFile.FileName}'?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (confirm != MessageBoxResult.Yes) return;
+
+                using (var db = new SharedFilesContext())
+                {
+                    var entity = await db.SharedFiles
+                       .FirstOrDefaultAsync(s =>
+                           s.FileName == SelectedFile.FileName &&
+                           s.Link == SelectedFile.Link &&
+                           s.SharedAt == SelectedFile.SharedAt);
+                    if (entity == null)
+                    {
+                        // If not found in DB, remove from collection to keep UI consistent
+                        Application.Current.Dispatcher.Invoke(() => SharedFiles.Remove(SelectedFile));
+                        SelectedFile = null;
+                        new ShowMessage("Selected file was not found in database but removed from the list.");
+                        return;
+                    }
+                    db.SharedFiles.Remove(entity);
+                    await db.SaveChangesAsync();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        SharedFiles.Remove(SelectedFile);
+                        SelectedFile = null;
+                    });
+                    new ShowMessage("Selected file removed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("RemoveSelectedAsync failed: " + ex.Message);
+                await DeviceManagement.SendLogs(ex.Message, "SharedFilesViewModel.RemoveSelectedAsync");
+                new ShowMessage("Remove selected failed: " + ex.Message);
+            }
+        }
+
         private async Task RemoveAllAsync()
         {
             try

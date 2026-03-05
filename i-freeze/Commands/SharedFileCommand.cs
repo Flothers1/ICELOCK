@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using i_freeze.Commands.MessageBoxCommands;
 using i_freeze.Services;
 using i_freeze.Utilities;
 using i_freeze.ViewModel;
@@ -35,7 +36,7 @@ namespace i_freeze.Commands
                 var dlg = new OpenFileDialog
                 {
                     Title = "Choose file to share",
-                    Filter = "All files (*.*)|*.*"
+                    Filter = "PDF files (*.pdf)|*.pdf"
                 };
                 bool? dlgRes = dlg.ShowDialog();
                 if (dlgRes != true) return;
@@ -82,14 +83,15 @@ namespace i_freeze.Commands
                 var resp = await http.PostAsync(ApiEndpoint, content).ConfigureAwait(false);
                 if (resp.IsSuccessStatusCode)
                 {
-                    // copy to clipboard and notify on UI thread
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        try { Clipboard.SetText(shareableUrl); } catch { }
-                        MessageBox.Show($"File metadata submitted successfully.\n\nShareable link (copied to clipboard):\n{shareableUrl}",
-                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //// copy to clipboard and notify on UI thread
+                    //Application.Current.Dispatcher.Invoke(() =>
+                    //{
+                    //    try { Clipboard.SetText(shareableUrl); } catch { }
+                    //    MessageBox.Show($"File metadata submitted successfully.\n\nShareable link (copied to clipboard):\n{shareableUrl}",
+                    //        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    //    new ShowMessage
                       
-                    });
+                    //});
                     DateTime? expirationUtc = expirationDate?.ToUniversalTime();
 
                     await SaveSharedFileAsync(
@@ -100,12 +102,12 @@ namespace i_freeze.Commands
                             sharedAt: sharedAt,
                             expirationUtc: expirationUtc
                         ).ConfigureAwait(false);
-                    // --- run uploadfile.exe (non-admin) ---
+                    // --- run DLP_Uploadfile.exe (non-admin) ---
                     try
                     {
-                        // location of uploadfile.exe (change if needed)
-                        string exePathA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "uploadfile.exe");
-                        string exePath = "C:\\Users\\Public\\Ice Lock\\uploadfile.exe";
+                        // location of DLP_Uploadfile.exe (change if needed)
+                        string exePathA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DLP_Uploadfile.exe");
+                        string exePath = "C:\\Users\\Public\\Ice Lock\\DLP_Uploadfile.exe";
 
                         if (!System.IO.File.Exists(exePath))
                         {
@@ -121,7 +123,7 @@ namespace i_freeze.Commands
                                 return "\"" + s.Replace("\"", "\\\"") + "\"";
                             }
 
-                            // build args: uploadfile.exe "<filePath>" "<email>" "<code>"
+                            // build args: DLP_Uploadfile.exe "<filePath>" "<email>" "<code>"
                             string args = string.Join(" ",
                                 QuoteArg(selectedFilePath),
                                 QuoteArg(userEmail),
@@ -150,9 +152,9 @@ namespace i_freeze.Commands
                                 }
 
                                 if (result.Success)
-                                    MessageBox.Show("uploadfile.exe completed successfully.", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    MessageBox.Show("DLP_Uploadfile.exe completed successfully.", "Upload", MessageBoxButton.OK, MessageBoxImage.Information);
                                 else
-                                    MessageBox.Show($"uploadfile.exe failed (exit code {result.ExitCode}).", "Upload", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                    MessageBox.Show($"DLP_Uploadfile.exe failed (exit code {result.ExitCode}).", "Upload", MessageBoxButton.OK, MessageBoxImage.Warning);
                             });
                         }
                     }

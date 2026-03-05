@@ -247,6 +247,16 @@
             Cursor="Hand">
                 <!-- template unchanged -->
             </Button>
+            <Button Content="Remove Item" 
+            Command="{Binding RemoveCommand}"
+            Foreground="White" 
+            Background="#FF175AA8" 
+            Width="120"
+            Height="32"
+            Margin="4"
+            Cursor="Hand">
+                <!-- template unchanged -->
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>
