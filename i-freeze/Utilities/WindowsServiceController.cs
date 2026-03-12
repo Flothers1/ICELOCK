@@ -22,8 +22,12 @@ namespace i_freeze.Utilities
             DLP_PM = 129,
 
             BlockProcess = 130,
-            //Add
-            FreezeWRAndFreezeNMStartUp = 176,
+            BlockDLP_CAF = 131,
+            BlockDLP_SA = 132,
+            BlockDLP_RCF = 133,
+            BlockDecrypt_All = 134,
+        //Add
+        FreezeWRAndFreezeNMStartUp = 176,
             FreezeWRAndFreezeNMShoutDown = 177,
             BlockVPNGroup = 178,
             UnblockVPNGroup = 179,
@@ -36,7 +40,9 @@ namespace i_freeze.Utilities
             iFreezeUpdate = 185,
             DLP_CAF = 186,
             DLP_SA = 187,
-            DLP_RCF = 188
+            DLP_RCF = 188,
+            Decrypt_All = 189
+
 
 
         }
@@ -171,9 +177,29 @@ namespace i_freeze.Utilities
         {
             await SendCommandToService(Command.DLP_PM);
         }
+        public async Task RunDecryptAll()
+        {
+            await SendCommandToService(Command.Decrypt_All);
+        }
         public async Task BlockDLPProcess()
         {
             await SendCommandToService(Command.BlockProcess);
+        }
+        public async Task BlockDLP_CAFProcess()
+        {
+            await SendCommandToService(Command.BlockDLP_CAF);
+        }
+        public async Task BlockDLP_SAProcess()
+        {
+            await SendCommandToService(Command.BlockDLP_SA);
+        }
+        public async Task BlockDecrypt_AllProcess()
+        {
+            await SendCommandToService(Command.BlockDecrypt_All);
+        }
+        public async Task BlockDLP_RCFProcess()
+        {
+            await SendCommandToService(Command.BlockDLP_RCF);
         }
 
         // Helper method to send a command to the service

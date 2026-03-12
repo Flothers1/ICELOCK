@@ -10,6 +10,7 @@
 		<Platforms>AnyCPU;x64;x86</Platforms>
 		<ApplicationIcon>Images\ICELOCk.ico</ApplicationIcon>
 		<PlatformTarget>x64</PlatformTarget>
+		<AssemblyName>IceLock</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

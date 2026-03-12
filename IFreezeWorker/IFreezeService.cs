@@ -14,7 +14,12 @@ namespace IceLockWorker
     public class IFreezeService : ServiceBase
     {
         private const int DLP_PM = 129;
+        //Block DLP processes
         private const int BlockDLPProcess = 130;
+        private const int BlockDLP_CAF = 131;
+        private const int BlockDLP_SA = 132;
+        private const int BlockDLP_RCF = 133;
+        private const int BlockDecrypt_All = 134;
 
    
         private const int Enable_Event_Viewer = 142;
@@ -32,6 +37,7 @@ namespace IceLockWorker
         private const int DLP_CAF = 186;
         private const int DLP_SA = 187;
         private const int DLP_RCF = 188;
+        private const int Decrypt_All = 189;
     
 
 
@@ -80,8 +86,8 @@ namespace IceLockWorker
                     Log("SyncSignsDB region: StackTrace - " + ex.StackTrace);
                 }
                 #endregion
-                Log("Run DLP_PM");
-                RunDLP_PM();
+                //Log("Run DLP_PM");
+                //RunDLP_PM();
 
                 //RunDLP_CAF();
                 //Log("0");
@@ -180,6 +186,9 @@ namespace IceLockWorker
                     case DLP_PM:
                         RunDLP_PM();
                         break;
+                    case Decrypt_All:
+                        RunDecrypt_All();
+                        break;
                     case FreezeWR_And_FreezeNM_StartUp:
                         FreezeWRAndFreezeNMStartUp();
                         break;
@@ -197,13 +206,22 @@ namespace IceLockWorker
                     case Block_AppsToggle:
                         BlockedAppToogle(); 
                         break;
+                    //Block DLP processes
                     case BlockDLPProcess:
                         BlockDLPProcesses();
                         break;
-                    //case NSSM_IFREEZEToggle:
-                    //    NSSMIFREEZEToggle();
-                    //    break;
-
+                    case BlockDLP_CAF:
+                        BlockDLP_CAFProcess();
+                        break;
+                    case BlockDLP_SA:
+                        BlockDLP_SAProcess();
+                        break;
+                    case BlockDLP_RCF:
+                        BlockDLP_RCFProcess();
+                        break;
+                    case BlockDecrypt_All:
+                        BlockDecryptAll();
+                        break;
                     case iFreeze_Update:
                         iFreezeUpdateToggle();
                         break;
@@ -232,6 +250,10 @@ namespace IceLockWorker
         private void RunDLP_RCF()
         {
             new DLPControl().RunDLP_RCF();
+        }
+        private void RunDecrypt_All()
+        {
+            new DLPControl().RunDecryptor_all_dlp();
         }
         private void FreezeWRAndFreezeNMStartUp()
         {
@@ -355,61 +377,55 @@ namespace IceLockWorker
                 await Log("Error in KillAllBlockedProcesses: " + ex.Message);
             }
         }
-
-        //public async void UnBlockedAppToogle()
-        //{
-        //    await Log("StopBlockedApp i-FreezeBA");
-
-
-        //    DeviceContext deviceContext = new DeviceContext();
-        //    var getBlockedAppsVlue = deviceContext.DeviceActions.FirstOrDefault();
-
-        //    if (getBlockedAppsVlue.AppManager == "true")
-        //    {
-        //        new ProcessKiller().UnBlockedProcesses();
-
-        //        await Task.Delay(2000);
-
-        //        new ProcessKiller().KillAllBlockedProcesses();
-        //    }
-        //    else
-        //    {
-        //        getBlockedAppsVlue.AppManager = "false";
-        //        deviceContext.SaveChanges();
-
-        //        new ProcessKiller().UnBlockedProcesses();
-        //    }
-        //}
-
-
-        //private Task<int> GetBlockedToggleValueFromDB()
-        //{
-        //    //DeviceStatusContext deviceStatusContext = new DeviceStatusContext();
-
-        //    //var getBlockedAppsVlue = deviceStatusContext.DeviceAction.FirstOrDefault(a => a.DeviceName == "BlockedToggle");
-        //    DeviceContext deviceContext = new DeviceContext();
-        //    var getBlockedAppsVlue = deviceContext.DeviceActions.FirstOrDefault();
-
-
-        //    if (getBlockedAppsVlue != null)
-        //        return Task.FromResult(getBlockedAppsVlue);
-        //    else
-        //        return Task.FromResult(0);
-
-        //}
-
+        public async void BlockDLP_CAFProcess()
+        {
+            Log("start BlockDLP_CAF");
+            try
+            {
+                new DLPBlockerControl().BlockDlpCaf();
+            }
+            catch (Exception ex)
+            {
+                await Log("Error in Kill DLP_CAF process: " + ex.Message);
+            }
+        }
+        public async void BlockDLP_SAProcess()
+        {
+            Log("start BlockDLP_SAProcess");
+            try
+            {
+                new DLPBlockerControl().BlockDlpSa();
+            }
+            catch (Exception ex)
+            {
+                await Log("Error in Kill DLP_SA process: " + ex.Message);
+            }
+        }
+        public async void BlockDLP_RCFProcess()
+        {
+            Log("start BlockDLP_RCFProcess");
+            try
+            {
+                new DLPBlockerControl().BlockDlpRcf();
+            }
+            catch (Exception ex)
+            {
+                await Log("Error in Kill DLP_RCF process: " + ex.Message);
+            }
+        }
+        public async void BlockDecryptAll()
+        {
+            Log("start Block Decrypt All");
+            try
+            {
+                new DLPBlockerControl().BlockDecryptAll();
+            }
+            catch (Exception ex)
+            {
+                await Log("Error in Kill decryptor_all_dlp process: " + ex.Message);
+            }
+        }
         #endregion
-
-        //private void RunInfiniteKillProcessLoop()
-        //{
-        //    //while (keepRunning)
-        //    //{
-        //        new ProcessKiller().KillAllBlockedProcesses();
-        //        //Thread.Sleep(1000);
-        //    //}
-        //}
-
-
         private async void RunInfinityExeWithoutKillProcess()
         {
             try
@@ -535,13 +551,6 @@ namespace IceLockWorker
                 }
             }
         }
-
-
-       
-       
-
-
-
 
     }
 }

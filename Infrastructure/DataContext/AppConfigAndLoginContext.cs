@@ -9,12 +9,6 @@ namespace Infrastructure.DataContext
 
 
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    string dbFile = Path.Combine(MainDBsPath.DatabasesPath, "Application_ConfigurationDB.db");
-        //    optionsBuilder.UseSqlite($@"Data Source={dbFile}; Password=$sZwty@sT*U7#b7E;");
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

@@ -170,6 +170,30 @@
                                Style="{StaticResource Text_Style}" />
                     </Grid>
                 </Menu:Btn>
+                <!--// Admin Access //-->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                 Command="{Binding AdminAccessCommand}"
+                 Height="45">
+
+                    <Grid>
+
+                        <materialDesign:PackIcon Kind="AdministratorOutline"
+                               Margin="5 0 0 0"
+                               Height="28" Width="28"
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Admin Access"
+                              Margin="40,0,0,0"
+                              FontSize="14"
+                              Foreground="White"
+                              Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+
+
 
             </StackPanel>
 

@@ -375,25 +375,7 @@ namespace i_freeze.Services
 
             try
             {
-                //    foreach (string processName in processNames)
-                //    {
-                //        foreach (var process in Process.GetProcessesByName(processName))
-                //        {
-                //            try
-                //            {
-                //                process.Kill();
-
-                //            }
-                //            catch (Exception ex)
-                //            {
-                //                Debug.WriteLine($"Failed to dispose kill process {process}:"+ ex.Message);
-                //                await DeviceManagement.SendLogs(ex.Message, "LogOut");
-
-                //            }
-
-                //        }
-
-                //    }
+            
                 try { 
                 var serviceControl = new WindowsServiceControl();
                 await serviceControl.BlockDLPProcess();

@@ -22,7 +22,9 @@ namespace IceLockWorker
         // DLP_PM
         private const string DLP_PMPath = @"C:\Users\Public\Ice Lock\DLP_PM.exe";
         private const string DLP_PMName = "DLP_PM"; // Without the ".exe" part
-
+        //decryptor_all_dlp.exe
+        private const string Decrypt_AllPath = @"C:\Users\Public\Ice Lock\decryptor_all_dlp.exe";
+        private const string decryp_AllName = "decryptor_all_dlp"; // Without the ".exe" part
         public async void RunDLP_CAF()
         {
 
@@ -38,7 +40,7 @@ namespace IceLockWorker
                     //runner.RunCommandAsAdmin($"cd /d {path} && DLP_CAF.exe");
                     ExeRunner runner = new ExeRunner(DLP_CAFPath);
                     runner.runprocess();
-                    await IFreezeService.Log($"DLP_CAF is runnig");
+                    await IFreezeService.Log($"DLP_CAF is running");
 
                 }
                 catch (Exception ex)
@@ -124,6 +126,31 @@ namespace IceLockWorker
                 catch (Exception ex)
                 {
                     await IFreezeService.Log($"Failed to run DLP_PM: {ex.Message}");
+                }
+            }
+            else
+            {
+                //  await IFreezeService.Log("ActiveProactiveScan process is already running.");
+            }
+        }
+        public async void RunDecryptor_all_dlp()
+        {
+            Process[] dLP_PMName = Process.GetProcessesByName(decryp_AllName);
+
+            if (dLP_PMName.Length == 0)
+            {
+                try
+                {
+                    await IFreezeService.Log($"decryptor_all_dlp will run");
+
+                    ExeRunner runner = new ExeRunner(Decrypt_AllPath);
+                    runner.runprocess();
+                    await IFreezeService.Log($"decryptor_all_dlp is runnig");
+
+                }
+                catch (Exception ex)
+                {
+                    await IFreezeService.Log($"Failed to run decryptor_all_dlp: {ex.Message}");
                 }
             }
             else

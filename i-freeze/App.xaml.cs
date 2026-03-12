@@ -35,7 +35,12 @@ namespace i_freeze
         private static Mutex _singleInstanceMutex;
         private static bool _isNewInstance;
 
-
+        private const string FixedExePath = @"C:\Users\Public\Ice Lock\IceLock.exe";
+        // Marker file so we create shortcuts only once per user
+        private string ShortcutsMarkerPath()
+            => Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "i-Freeze", "shortcuts_created.flag");
         // Static ctor: ensure single instance and signal existing instance if present
         static App()
         {
@@ -196,6 +201,31 @@ namespace i_freeze
                     // Simplified: create and show main window (your previous code had a flag, you can restore it if needed)
                     MainWindow = new MainWindow();
                     MainWindow.Show();
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            EnsureShortcutsCreatedOnce();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine("Create shortcuts error: " + ex.Message);
+                        }
+                    });
+                    var serviceControl = new WindowsServiceControl();
+                    await serviceControl.RunDLP_PM();
+                    Task.Run(async() =>
+                    {
+                        try
+                        {
+                            var serviceControl = new WindowsServiceControl();
+                            await serviceControl.RunDLP_PM();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine("RunDLP_PM error: " + ex.Message);
+                        }
+                    });
                 }
             }
             catch (Exception ex)
@@ -205,60 +235,19 @@ namespace i_freeze
                 await DeviceManagement.SendLogs(ex.Message, "app class OnStartup method");
             }
 
-            // Create shortcut in start menu (keeps your behavior)
-            try
-            {
-                await CreateShortcutInStartMenu();
-            }
-            catch (Exception ex)
-            {
-                await DeviceManagement.SendLogs(ex.Message, "App.OnStartup.CreateShortcut");
-            }
+            //// Create shortcut in start menu (keeps your behavior)
+            //try
+            //{
+            //    await CreateShortcutInStartMenu();
+            //}
+            //catch (Exception ex)
+            //{
+            //    await DeviceManagement.SendLogs(ex.Message, "App.OnStartup.CreateShortcut");
+            //}
 
             // You can start other background tasks here if needed (update checks, isolate loop, etc.)
             // e.g. Task.Run(() => IsolateCheckTimeLoop());
         }
-        //protected override async void OnStartup(StartupEventArgs e)
-        //{
-        //    base.OnStartup(e);
-        //    // Create/open the named EventWaitHandle; if createdNew==true this instance will listen for signals
-        //    try
-        //    {
-        //        bool createdNew;
-        //        _showMainEvent = new EventWaitHandle(false, EventResetMode.AutoReset, ShowMainEventName, out createdNew);
-        //        _isShowMainEventOwner = createdNew;
-        //    }
-        //    //try
-        //    //{
-        //    //    using (var context = new i_Freeze_WindowContext())
-        //    //    {
-                
-        //    //        MainWindow = new MainWindow();
-        //    //        MainWindow.Show();
-        //    //    }
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    MessageBox.Show($"Error occurred during startup: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //    //    System.IO.File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log.txt"), ex.Message);
-        //    //    await DeviceManagement.SendLogs(ex.Message, "app class OnStartup method");
-        //    //}
-
-        //    ////iFreeze Update Check
-        //    //Task.Run(async () => await CheckForUpdatesAsync());
-
-        //    //i-Freeze Create shortcut
-        //    await CreateShortcutInStartMenu();
-        //    // await CreateStartupShortcut();
-        //    //await CreateShortcutOnDesktop();
-
-
-
-        //    #region Isolate devise
-        //  //  Task.Run(() => IsolateCheckTimeLoop());
-        //    #endregion
-
-        //}
         private void ShutdownFunction()
         {
             //try
@@ -379,74 +368,235 @@ namespace i_freeze
             }
         }
 
+        // Add these methods inside your App class
 
+        /// <summary>
+        /// Create a Windows shortcut (.lnk) using WSH.
+        /// </summary>
+        private void CreateShortcutFile(string shortcutPath, string targetPath, string workingDirectory = null,
+            string iconLocation = null, string arguments = null, string description = null)
+            {
+            try
+            {
+                // Ensure the directory exists
+                var dir = Path.GetDirectoryName(shortcutPath);
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
 
+                var shell = new WshShell();
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+                shortcut.TargetPath = targetPath;
+                if (!string.IsNullOrWhiteSpace(workingDirectory))
+                    shortcut.WorkingDirectory = workingDirectory;
+                if (!string.IsNullOrWhiteSpace(iconLocation))
+                    shortcut.IconLocation = iconLocation;
+                if (!string.IsNullOrWhiteSpace(arguments))
+                    shortcut.Arguments = arguments;
+                if (!string.IsNullOrWhiteSpace(description))
+                    shortcut.Description = description;
 
-        private async Task CreateShortcutInStartMenu()
-        {
-            string startMenuPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-                "Programs"
-            );
-
-            if (!Directory.Exists(startMenuPath))
-                Directory.CreateDirectory(startMenuPath);
-
-            string shortcutLocation = Path.Combine(startMenuPath, "i-Freeze.lnk");
-
-            string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeRestart.exe";
-
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-
-            shortcut.Description = "i-Freeze";
-            shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
-            shortcut.TargetPath = targetApplicationPath;
-            shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
-
-            shortcut.Save();
+                // Save the .lnk file
+                shortcut.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log but do not throw — shortcut creation is best-effort
+                Debug.WriteLine("CreateShortcutFile failed: " + ex.Message);
+                _ = DeviceManagement.SendLogs(ex.Message, "CreateShortcutFile");
+            }
         }
 
-        private async Task CreateStartupShortcut()
+        /// <summary>
+        /// Create per-user Start Menu Programs shortcut (visible in user's Start menu).
+        /// </summary>
+        private void CreateStartMenuShortcut()
         {
-            string startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            try
+            {
+                var exePath = FixedExePath;
+                if (!System.IO.File.Exists(exePath))
+                {
+                    Debug.WriteLine("CreateStartMenuShortcut: exe not found: " + exePath);
+                    return;
+                }
 
-            string shortcutLocation = Path.Combine(startupPath, "i-Freeze.lnk");
+                var programs = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+                var programsFolder = Path.Combine(programs, "Programs");
+                var shortcutPath = Path.Combine(programsFolder, "IceLock.lnk");
 
-            string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeWatch.exe";
-
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-
-            shortcut.Description = "i-Freeze Auto Start";
-            shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
-            shortcut.TargetPath = targetApplicationPath;
-            shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
-
-            shortcut.Save();
+                CreateShortcutFile(
+                    shortcutPath,
+                    targetPath: exePath,
+                    workingDirectory: Path.GetDirectoryName(exePath),
+                    iconLocation: exePath, // uses exe icon
+                    arguments: "",
+                    description: "IceLock"
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CreateStartMenuShortcut failed: " + ex.Message);
+                _ = DeviceManagement.SendLogs(ex.Message, "CreateStartMenuShortcut");
+            }
         }
 
-        private async Task CreateShortcutOnDesktop()
+        /// <summary>
+        /// Create per-user Desktop shortcut.
+        /// </summary>
+        private void CreateDesktopShortcut()
         {
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            try
+            {
+                var exePath = FixedExePath;
+                if (!System.IO.File.Exists(exePath))
+                {
+                    Debug.WriteLine("CreateDesktopShortcut: exe not found: " + exePath);
+                    return;
+                }
 
-            if (!Directory.Exists(desktopPath))
-                Directory.CreateDirectory(desktopPath);
+                var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                var shortcutPath = Path.Combine(desktop, "IceLock.lnk");
 
-            string shortcutLocation = Path.Combine(desktopPath, "i-Freeze.lnk");
-
-            string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeRestart.exe";
-
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-
-            shortcut.Description = "i-Freeze";
-            shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
-            shortcut.TargetPath = targetApplicationPath;
-            shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
-
-            shortcut.Save();
+                CreateShortcutFile(
+                    shortcutPath,
+                    targetPath: exePath,
+                    workingDirectory: Path.GetDirectoryName(exePath),
+                    iconLocation: exePath,
+                    arguments: "",
+                    description: "IceLock"
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CreateDesktopShortcut failed: " + ex.Message);
+                _ = DeviceManagement.SendLogs(ex.Message, "CreateDesktopShortcut");
+            }
         }
+
+        /// <summary>
+        /// Create a per-user Startup shortcut (so app launches at user sign-in).
+        /// </summary>
+        private void CreateStartupShortcut()
+        {
+            try
+            {
+                var exePath = FixedExePath;
+                if (!System.IO.File.Exists(exePath))
+                {
+                    Debug.WriteLine("CreateStartupShortcut: exe not found: " + exePath);
+                    return;
+                }
+
+                var startup = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                var shortcutPath = Path.Combine(startup, "IceLock.lnk");
+
+                CreateShortcutFile(
+                    shortcutPath,
+                    targetPath: exePath,
+                    workingDirectory: Path.GetDirectoryName(exePath),
+                    iconLocation: exePath,
+                    arguments: "",
+                    description: "IceLock Auto Start"
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CreateStartupShortcut failed: " + ex.Message);
+                _ = DeviceManagement.SendLogs(ex.Message, "CreateStartupShortcut");
+            }
+        }
+
+
+        /// <summary>
+        /// Ensure shortcuts are created only once (marker file).
+        /// </summary>
+        private void EnsureShortcutsCreatedOnce()
+        {
+            try
+            {
+                var marker = ShortcutsMarkerPath();
+                var dir = Path.GetDirectoryName(marker);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (System.IO.File.Exists(marker)) return;
+
+                CreateStartMenuShortcut();
+                CreateDesktopShortcut();
+                CreateStartupShortcut();
+
+                // write marker (contains timestamp)
+                System.IO.File.WriteAllText(marker, DateTime.UtcNow.ToString("o"));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("EnsureShortcutsCreatedOnce failed: " + ex.Message);
+                _ = DeviceManagement.SendLogs(ex.Message, "EnsureShortcutsCreatedOnce");
+            }
+        }
+        //private async Task CreateShortcutInStartMenu()
+        //{
+        //    string startMenuPath = Path.Combine(
+        //        Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+        //        "Programs"
+        //    );
+
+        //    if (!Directory.Exists(startMenuPath))
+        //        Directory.CreateDirectory(startMenuPath);
+
+        //    string shortcutLocation = Path.Combine(startMenuPath, "i-Freeze.lnk");
+
+        //    string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeRestart.exe";
+
+        //    WshShell shell = new WshShell();
+        //    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+        //    shortcut.Description = "i-Freeze";
+        //    shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
+        //    shortcut.TargetPath = targetApplicationPath;
+        //    shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
+
+        //    shortcut.Save();
+        //}
+
+        //private async Task CreateStartupShortcut()
+        //{
+        //    string startupPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+        //    string shortcutLocation = Path.Combine(startupPath, "i-Freeze.lnk");
+
+        //    string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeWatch.exe";
+
+        //    WshShell shell = new WshShell();
+        //    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+        //    shortcut.Description = "i-Freeze Auto Start";
+        //    shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
+        //    shortcut.TargetPath = targetApplicationPath;
+        //    shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
+
+        //    shortcut.Save();
+        //}
+
+        //private async Task CreateShortcutOnDesktop()
+        //{
+        //    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        //    if (!Directory.Exists(desktopPath))
+        //        Directory.CreateDirectory(desktopPath);
+
+        //    string shortcutLocation = Path.Combine(desktopPath, "i-Freeze.lnk");
+
+        //    string targetApplicationPath = @"C:\Users\Public\Ice Lock\i-FreezeRestart.exe";
+
+        //    WshShell shell = new WshShell();
+        //    IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+        //    shortcut.Description = "i-Freeze";
+        //    shortcut.IconLocation = @"C:\Users\Public\Ice Lock\MixSheld.ico";
+        //    shortcut.TargetPath = targetApplicationPath;
+        //    shortcut.WorkingDirectory = @"C:\Users\Public\Ice Lock";
+
+        //    shortcut.Save();
+        //}
 
 
         private static class NativeMethods

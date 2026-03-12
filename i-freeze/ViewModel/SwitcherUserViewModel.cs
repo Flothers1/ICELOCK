@@ -20,11 +20,13 @@ namespace i_freeze.ViewModel
     {
         public ICommand HomeCommand { get; }
         public ICommand LabeledFilesCommand { get; }
+        public ICommand AdminAccessCommand { get; }
 
         public ICommand SettingsCommand { get; }
         public ICommand LabelsCommand { get; }
         public ICommand SharedFilesCommand { get; }
         public ICommand FilesProtectionCommand { get; }
+        public ICommand DataControlsCommand { get; }
 
         public ICommand LogoutCommand { get; }
 
@@ -32,11 +34,13 @@ namespace i_freeze.ViewModel
 
         private void Home(object obj) => AppSettings.Instance.CurrentView = new HomeViewModel();
         private void LabeledFiles(object obj) => AppSettings.Instance.CurrentView = new LabeledFilesViewModel();
+        private void Admin(object obj) => AppSettings.Instance.CurrentView = new AdminLoginViewModel();
 
         private void Settings(object obj) => AppSettings.Instance.CurrentView = new SettingsViewModel();
         private void Labels(object obj) => AppSettings.Instance.CurrentView = new LabelsViewModel();
         private void SharedFiles(object obj) => AppSettings.Instance.CurrentView = new SharedFilesViewModel();
         private void FilesProtection(object obj) => AppSettings.Instance.CurrentView = new FilesProtectionViewModel();
+        private void DataControls(object obj) => AppSettings.Instance.CurrentView = new DataControlsViewModel();
 
 
         private const string Remote_DesktopPathiFreeze = @"C:\Users\Public\Ice Lock\Remote_Desktop.exe";
@@ -48,11 +52,12 @@ namespace i_freeze.ViewModel
         {
             HomeCommand = new RelayCommand(Home);
             LabeledFilesCommand = new RelayCommand(LabeledFiles);
-
+            AdminAccessCommand = new RelayCommand(Admin);
             SettingsCommand = new RelayCommand(Settings);
             LabelsCommand = new RelayCommand(Labels);
             SharedFilesCommand = new RelayCommand(SharedFiles);
             FilesProtectionCommand = new RelayCommand(FilesProtection);
+            DataControlsCommand = new RelayCommand(DataControls);
 
             var licenseService = new LicenseService();
             LogoutCommand = new RelayCommand(async _ => await licenseService.LogoutAsync());

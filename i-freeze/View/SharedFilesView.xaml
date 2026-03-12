@@ -47,7 +47,7 @@
                       Foreground="#FF175AA8"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      HorizontalContentAlignment="Left" SelectionChanged="FilesList_SelectionChanged">
+                      HorizontalContentAlignment="Left" SelectionChanged="FilesList_SelectionChanged" Width="781">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -185,33 +185,40 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <!--Actions column with buttons-->
-                        <GridViewColumn Header="Actions" Width="135">
+                        <GridViewColumn Header="Actions" Width="80">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" 
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center">
+                                        <!-- Open Link Button -->
                                         <Button Command="{Binding DataContext.OpenLinkCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                       CommandParameter="{Binding}"
-                       Width="30"
-                       Height="30"
-                       ToolTip="Open link">
-                                            <TextBlock Text="&#xE8A7;" 
-                              FontFamily="Segoe MDL2 Assets" 
-                              FontSize="16"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"/>
+                                               CommandParameter="{Binding}"
+                                               Width="30"
+                                               Height="30"
+                                               ToolTip="Open link"
+                                               Margin="2"
+                                                Padding="0">
+                                            <TextBlock Text="&#xE774;" 
+                                              FontFamily="Segoe MDL2 Assets" 
+                                              FontSize="16"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Foreground="White"/>
                                         </Button>
+                                        <!-- Copy Link Button -->
                                         <Button Command="{Binding DataContext.CopyLinkCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                       CommandParameter="{Binding}"
-                       Width="30"
-                       Height="30"
-                       ToolTip="Copy link to clipboard">
+                                           CommandParameter="{Binding}"
+                                           Width="30"
+                                           Height="30"
+                                           ToolTip="Copy link to clipboard"
+                                           Margin="2">
                                             <TextBlock Text="&#xE8C8;" 
                               FontFamily="Segoe MDL2 Assets" 
                               FontSize="16"
                               HorizontalAlignment="Center"
-                              VerticalAlignment="Center"/>
+                              VerticalAlignment="Center"
+                              Foreground="White"/>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
